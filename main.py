@@ -2,32 +2,26 @@ import streamlit as st
 import gspread
 from streamlit_autorefresh import st_autorefresh
 
-# --- INITIALISATION DE LA SESSION ---
-# On vérifie si la date du jour n'est pas déjà en mémoire pour la créer une seule fois.
-if 'today' not in st.session_state: # <--- 2. AJOUTER CE BLOC
-    st.session_state.today = datetime.now()
-
 # --- CONFIGURATION DE LA PAGE ---
-# Le reste de votre code est bon, il commence ici...
 st.set_page_config(
     page_title="Courses à Saint-Malo",
     page_icon="🛒",
     layout="centered",
     initial_sidebar_state="collapsed"
+)
 
-
-# --- CONNEXION SÉCURISÉE À GOOGLE SHEETS (inchangée) ---
+# --- CONNEXION SÉCURISÉE À GOOGLE SHEETS ---
 @st.cache_resource
 def connect_to_sheet():
     """Initialise la connexion à Google Sheets en utilisant les secrets de Streamlit."""
     sa = gspread.service_account_from_dict(st.secrets["gcp_credentials"])
-    sh = sa.open("Liste de Courses App")
+    sh = sa.open("Liste de Courses App") # Assurez-vous que le nom correspond bien
     worksheet = sh.sheet1
     return worksheet
 
 worksheet = connect_to_sheet()
 
-# --- FONCTIONS DE GESTION DES DONNÉES (inchangées) ---
+# --- FONCTIONS DE GESTION DES DONNÉES ---
 def charger_donnees():
     """Charge tous les articles depuis la feuille de calcul."""
     records = worksheet.get_all_records()
@@ -49,22 +43,20 @@ def supprimer_selection():
     items_to_keep = [item for item in all_items if not item['coche']]
     worksheet.clear()
     worksheet.append_row(["nom", "coche"])
-    for item in items_to_keep:
-        worksheet.append_row([item['nom'], str(item['coche']).upper()])
+    if items_to_keep:
+        worksheet.append_rows([list(item.values()) for item in items_to_keep])
+
 
 def tout_effacer():
     """Supprime tous les articles, ne laissant que l'en-tête."""
     worksheet.clear()
     worksheet.append_row(["nom", "coche"])
 
-# --- INTERFACE UTILISATEUR AMÉLIORÉE ---
-
-# Titre principal
-st.title("🛒 Liste de courses")
-st.caption(f"Nous sommes le {st.session_state.today.strftime('%A %d %B %Y')}")
+# --- INTERFACE UTILISATEUR ---
+st.title("🛒 Liste de Courses")
 
 # Rafraîchissement automatique pour la synchronisation
-st_autorefresh(interval=15000, key="data_refresh") # 15 secondes
+st_autorefresh(interval=15000, key="data_refresh")
 
 # --- BLOC D'ACTIONS ---
 with st.form(key='form_ajout', clear_on_submit=True):
@@ -78,7 +70,6 @@ with st.form(key='form_ajout', clear_on_submit=True):
     with col2:
         bouton_ajouter = st.form_submit_button(label="Ajouter", use_container_width=True)
 
-# Logique d'ajout avec notification "toast"
 if bouton_ajouter and nouvel_article:
     worksheet.append_row([nouvel_article.strip().capitalize(), "FALSE"])
     st.toast(f"✅ '{nouvel_article}' ajouté !")
@@ -92,32 +83,26 @@ articles_dans_caddie = [item for item in liste_courses if item['coche']]
 # --- AFFICHAGE DE LA LISTE ---
 col_g, col_d = st.columns(2)
 
-# Colonne de gauche : Compteur et articles à acheter
 with col_g:
     st.metric(label="Articles à prendre", value=len(articles_a_acheter))
-    
     if not articles_a_acheter and not articles_dans_caddie:
-         st.info("Votre liste de courses est vide. Ajoutez un article pour commencer !", icon="📝")
+        st.info("Votre liste est vide. Ajoutez un article pour commencer !", icon="📝")
     else:
         with st.container(border=True):
             for article in articles_a_acheter:
-                # Si l'utilisateur coche la case
                 if st.checkbox(article['nom'], value=False, key=f"add_{article['nom']}"):
                     maj_article(article['nom'], True)
                     st.rerun()
 
-# Colonne de droite : Caddie et actions de suppression
 with col_d:
     st.metric(label="Dans le caddie", value=len(articles_dans_caddie))
     with st.container(border=True):
         for article in articles_dans_caddie:
-            # Affiche l'article barré et une case cochée
-            # Si l'utilisateur décoche la case
             if not st.checkbox(f"~{article['nom']}~", value=True, key=f"remove_{article['nom']}"):
                 maj_article(article['nom'], False)
                 st.rerun()
 
-# Boutons de suppression en bas pour un look plus propre
+# --- BOUTONS DE GESTION ---
 if articles_dans_caddie or articles_a_acheter:
     st.markdown("---")
     col_suppr1, col_suppr2 = st.columns(2)
