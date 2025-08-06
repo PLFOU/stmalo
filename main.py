@@ -64,7 +64,7 @@ with st.form(key='form_ajout', clear_on_submit=True):
     with col1:
         nouvel_article = st.text_input(
             "Ajouter un article",
-            placeholder="Ex: Galettes, cidre, beurre salé...",
+            placeholder="Ajouter vos articles..",
             label_visibility="collapsed"
         )
     with col2:
@@ -107,12 +107,13 @@ if articles_dans_caddie or articles_a_acheter:
     st.markdown("---")
     col_suppr1, col_suppr2 = st.columns(2)
     with col_suppr1:
-        if st.button("🗑️ Vider le caddie", use_container_width=True, help="Supprime uniquement les articles cochés"):
-            supprimer_selection()
-            st.toast("🛒 Caddie vidé !")
-            st.rerun()
-    with col_suppr2:
         if st.button("🔄 Recommencer la liste", use_container_width=True, type="primary", help="Attention, supprime tout !"):
             tout_effacer()
             st.toast("💥 Liste remise à zéro !")
             st.rerun()
+    with col_suppr2:
+        if st.button("🗑️ Vider le caddie", use_container_width=True, help="Supprime uniquement les articles cochés"):
+            supprimer_selection()
+            st.toast("🛒 Caddie vidé !")
+            st.rerun()
+
