@@ -86,7 +86,7 @@ col_g, col_d = st.columns(2)
 with col_g:
     st.metric(label="Articles à prendre", value=len(articles_a_acheter))
     if not articles_a_acheter and not articles_dans_caddie:
-        st.info("Votre liste est vide. Ajoutez un article pour commencer !", icon="📝")
+        st.info("Votre liste est vide !", icon="📝")
     else:
         with st.container(border=True):
             for article in articles_a_acheter:
