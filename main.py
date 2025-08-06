@@ -60,7 +60,7 @@ def tout_effacer():
 # --- INTERFACE UTILISATEUR AMÉLIORÉE ---
 
 # Titre principal
-st.title("🛒 Liste de Courses")
+st.title("🛒 Liste de courses")
 st.caption(f"Nous sommes le {st.session_state.today.strftime('%A %d %B %Y')}")
 
 # Rafraîchissement automatique pour la synchronisation
