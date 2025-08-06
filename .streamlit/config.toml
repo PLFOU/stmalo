@@ -1,0 +1,15 @@
+[theme]
+# Couleurs primaires
+primaryColor="#005ea2" # Bleu marine des remparts
+
+# Couleur de fond principale
+backgroundColor="#f0f2f6" # Gris très clair, comme le sable humide
+
+# Couleur de fond secondaire (barre latérale, conteneurs)
+secondaryBackgroundColor="#ffffff" # Blanc pur
+
+# Couleur du texte
+textColor="#1a1a1a" # Noir doux
+
+# Police de caractères
+font="sans serif"
