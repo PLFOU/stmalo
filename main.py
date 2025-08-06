@@ -2,14 +2,19 @@ import streamlit as st
 import gspread
 from streamlit_autorefresh import st_autorefresh
 
+# --- INITIALISATION DE LA SESSION ---
+# On vérifie si la date du jour n'est pas déjà en mémoire pour la créer une seule fois.
+if 'today' not in st.session_state: # <--- 2. AJOUTER CE BLOC
+    st.session_state.today = datetime.now()
+
 # --- CONFIGURATION DE LA PAGE ---
-# On configure un titre et une icône. La barre latérale est masquée par défaut.
+# Le reste de votre code est bon, il commence ici...
 st.set_page_config(
     page_title="Courses à Saint-Malo",
     page_icon="🛒",
     layout="centered",
     initial_sidebar_state="collapsed"
-)
+
 
 # --- CONNEXION SÉCURISÉE À GOOGLE SHEETS (inchangée) ---
 @st.cache_resource
