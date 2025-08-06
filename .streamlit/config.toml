@@ -3,7 +3,7 @@
 primaryColor="#005ea2" # Bleu marine des remparts
 
 # Couleur de fond principale
-backgroundColor="#f0f2f6" # Gris très clair, comme le sable humide
+backgroundColor="#ffffff" # Gris très clair, comme le sable humide
 
 # Couleur de fond secondaire (barre latérale, conteneurs)
 secondaryBackgroundColor="#000000" # Blanc pur
