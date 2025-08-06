@@ -6,10 +6,10 @@ primaryColor="#005ea2" # Bleu marine des remparts
 backgroundColor="#f0f2f6" # Gris très clair, comme le sable humide
 
 # Couleur de fond secondaire (barre latérale, conteneurs)
-secondaryBackgroundColor="#ffffff" # Blanc pur
+secondaryBackgroundColor="#000000" # Blanc pur
 
 # Couleur du texte
-textColor="#1a1a1a" # Noir doux
+textColor="#ffffff" # Noir doux
 
 # Police de caractères
 font="sans serif"
